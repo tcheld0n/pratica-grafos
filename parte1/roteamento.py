@@ -2,7 +2,7 @@ import heapq
 from pathlib import Path
 
 
-PASTA_ATUAL = Path(__file__).parent
+PASTA_RAIZ = Path(__file__).parent.parent
 
 
 def ler_grafo(nome_arquivo):
@@ -23,7 +23,7 @@ def ler_grafo(nome_arquivo):
     - grafo em lista de adjacencia
     - lista de arestas
     """
-    caminho_arquivo = PASTA_ATUAL / nome_arquivo
+    caminho_arquivo = PASTA_RAIZ / "entrada" / nome_arquivo
 
     with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
         linhas = [linha.strip().split() for linha in arquivo if linha.strip()]

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 class GrafoWiFi:
     def __init__(self):
@@ -124,13 +125,14 @@ def salvar_saida(caminho_saida, num_cores, coloracao_resultado):
 
 
 if __name__ == "__main__":
+    PASTA_RAIZ = Path(__file__).parent.parent
     arquivos_processar = [
-        {"entrada": "entrada/grafo_wifi_p.txt", "saida": "parte2/saida_parte2_p.txt"},
-        {"entrada": "entrada/grafo_wifi_m.txt", "saida": "parte2/saida_parte2_m.txt"}
+        {"entrada": PASTA_RAIZ / "entrada" / "grafo_wifi_p.txt", "saida": PASTA_RAIZ / "parte2" / "saida_parte2_p.txt"},
+        {"entrada": PASTA_RAIZ / "entrada" / "grafo_wifi_m.txt", "saida": PASTA_RAIZ / "parte2" / "saida_parte2_m.txt"}
     ]
     
     for par in arquivos_processar:
-        if os.path.exists(par["entrada"]):
+        if par["entrada"].exists():
             print(f"Processando {par['entrada']}...")
             
             g = GrafoWiFi()
@@ -139,7 +141,7 @@ if __name__ == "__main__":
             solver = ColoracaoDSaturBacktracking(g)
             qtd_cores, resultado = solver.resolver()
             
-            os.makedirs(os.path.dirname(par["saida"]), exist_ok=True)
+            par["saida"].parent.mkdir(parents=True, exist_ok=True)
             salvar_saida(par["saida"], qtd_cores, resultado)
             print(f"Sucesso! Saída gerada em: {par['saida']}\n")
         else:
