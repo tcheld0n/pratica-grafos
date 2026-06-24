@@ -23,7 +23,7 @@ Rota mínima: `0 → 1 → 2 → 4 → 3 → 6 → 9`, custo `6`.
 
 ---
 
-# Comparativo Parte 2 - Coloracao de Grafos
+## Parte 2 — Coloração de Grafos
 
 ## Estrategia
 

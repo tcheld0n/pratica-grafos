@@ -14,7 +14,7 @@ Python 3.10 ou superior. Sem dependências externas.
 ### Parte 1 — Roteamento
 
 ```bash
-python parte1/roteamento.py
+python3 parte1/roteamento.py
 ```
 
 Lê `entrada/grafo_rede_p.txt` e `entrada/grafo_rede_m.txt` e gera:
@@ -25,7 +25,7 @@ Lê `entrada/grafo_rede_p.txt` e `entrada/grafo_rede_m.txt` e gera:
 ### Parte 2 — Coloração
 
 ```bash
-python parte2/colocaracao.py
+python3 parte2/colocaracao.py
 ```
 
 Lê `entrada/grafo_wifi_p.txt` e `entrada/grafo_wifi_m.txt` e gera:
