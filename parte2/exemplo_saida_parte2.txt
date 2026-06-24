@@ -1,4 +1,0 @@
-ALGORITMO: DSatur
-JUSTIFICATIVA: DSatur ordena os vertices pelo grau de saturacao (numero de cores distintas ja usadas pelos vizinhos), produzindo coloracoes proximo ao otimo sem backtracking exaustivo.
-NUM_CORES: 3
-COLORACAO: 0=1 1=2 2=3 3=1 4=2 5=1 6=2 7=1

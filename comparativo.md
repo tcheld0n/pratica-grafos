@@ -1,47 +1,52 @@
-# Comparativo Parte 2 - Coloracao de Grafos
+# Comparativo de Algoritmos
 
-## Estrategia
+## Parte 1 — Roteamento em Rede de Backbone
 
-A implementacao proposta para a Parte 2 utiliza **DSatur com backtracking
-exato**. O DSatur escolhe primeiro o vertice com maior grau de saturacao, em caso de empate, a implementacao prioriza o vertice de maior
-grau.
-O backtracking testa quantidades crescentes de cores. Assim, a primeira
-coloracao completa encontrada determina o numero cromatico do grafo.
+### Algoritmos considerados
 
-| Estrategia | Caracteristica | Garante o minimo? | Observacao |
-|---|---|---:|---|
-| Guloso simples | Colore os vertices em uma ordem fixa | Nao | Rapido, mas pode usar mais cores que o necessario |
-| DSatur guloso | Prioriza vertices com maior saturacao | Nao | Costuma produzir coloracoes melhores que o guloso simples |
-| Backtracking | Explora combinacoes de cores | Sim | Possui custo exponencial no pior caso |
-| DSatur + backtracking | Usa DSatur para orientar a busca exata | Sim | Estrategia adotada na implementacao analisada |
+| Algoritmo | Pesos negativos | Detecta ciclo negativo | Complexidade | Observação |
+|---|:---:|:---:|---|---|
+| Dijkstra | Não | Não | O((V + E) log V) | Ótimo para grafos esparsos sem pesos negativos |
+| Bellman-Ford | Sim | Sim | O(V × E) | Indicado quando há pesos negativos e fonte única |
+| Floyd-Warshall | Sim | Sim | O(V³) | Calcula todos os pares; excessivo para fonte única |
 
-## Validacao independente
+### Decisão
 
-O arquivo `parte2/validar_coloracao.py` realiza a verificacao sem importar
-nem modificar o algoritmo de coloracao. Para cada par formado pelo grafo e
-por sua saida, o validador:
+**Grafo pequeno** (`grafo_rede_p.txt`): todos os pesos são positivos. Dijkstra é aplicável e
+mais eficiente que Bellman-Ford para esse caso. Rota mínima: `0 → 1 → 3 → 4`, custo `7`.
 
-1. confere o numero declarado de vertices e arestas;
-2. verifica os quatro rotulos obrigatorios da saida;
-3. confirma que cada vertice aparece exatamente uma vez;
-4. exige cores inteiras iniciando em 1;
-5. compara `NUM_CORES` com a quantidade de cores distintas;
-6. verifica se vertices adjacentes receberam cores diferentes;
-7. informa todos os problemas encontrados em um relatorio textual.
+**Grafo médio** (`grafo_rede_m.txt`): há arestas com peso negativo decorrentes de acordos de
+SLA. Dijkstra não garante corretude nesse cenário. Floyd-Warshall seria excessivo para
+fonte única. Bellman-Ford foi escolhido por suportar pesos negativos, detectar ciclos
+negativos e ter custo proporcional a O(V × E) — adequado para o tamanho do grafo.
+Rota mínima: `0 → 1 → 2 → 4 → 3 → 6 → 9`, custo `6`.
 
-## Resultados
+---
 
-| Grafo | Vertices | Arestas | Cores encontradas | Conflitos | Arquivo final |
-|---|---:|---:|---:|---:|---|
-| Pequeno | 5 | 7 | 3 | 0 | Validado |
-| Medio | 8 | 11 | 3 | 0 | Validado |
+## Parte 2 — Alocação de Canais Wi-Fi
 
-Nos dois grafos, os vertices 0, 1 e 2 formam um triangulo. Portanto, qualquer
-coloracao valida precisa de pelo menos tres cores. Como a implementacao
-analisada encontrou coloracoes validas com tres cores, esses resultados sao
-otimos para as entradas atuais.
+### Algoritmos considerados
 
-O grafo medio possui mais vertices e arestas, mas nao exige mais cores que o
-grafo pequeno. Para essas instancias pequenas, o custo do backtracking e
-baixo. Em grafos maiores, o tempo pode crescer exponencialmente, embora a
-ordem DSatur normalmente reduza a quantidade de tentativas.
+| Estratégia | Garante o mínimo? | Observação |
+|---|:---:|---|
+| Guloso simples | Não | Rápido, mas pode usar mais cores que o necessário |
+| DSatur guloso | Não | Prioriza vértices com maior saturação; produz resultados melhores |
+| Backtracking puro | Sim | Custo exponencial no pior caso |
+| DSatur + backtracking | Sim | DSatur orienta a busca exata, reduzindo tentativas |
+
+### Decisão
+
+A implementação utiliza **DSatur com backtracking exato**. O DSatur escolhe o próximo
+vértice pelo maior grau de saturação (número de cores distintas já usadas pelos vizinhos),
+com desempate pelo maior grau original. O backtracking testa limites crescentes de cores
+até encontrar a primeira coloração válida, garantindo o número cromático χ(G).
+
+### Resultados
+
+| Grafo | Vértices | Arestas | Cores encontradas | Válida |
+|---|:---:|:---:|:---:|:---:|
+| Pequeno | 5 | 7 | 3 | Sim |
+| Médio | 8 | 11 | 3 | Sim |
+
+Nos dois grafos os vértices 0, 1 e 2 formam um triângulo, impondo χ(G) ≥ 3. Como a
+implementação encontrou colorações com exatamente 3 cores, os resultados são ótimos.

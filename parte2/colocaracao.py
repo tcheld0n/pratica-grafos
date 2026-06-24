@@ -1,5 +1,5 @@
-import os
 from pathlib import Path
+
 
 class GrafoWiFi:
     def __init__(self):
@@ -8,22 +8,21 @@ class GrafoWiFi:
         self.adj = {}
 
     def ler_arquivo(self, caminho_arquivo):
-        if not os.path.exists(caminho_arquivo):
+        caminho = Path(caminho_arquivo)
+        if not caminho.exists():
             raise FileNotFoundError(f"Arquivo não encontrado: {caminho_arquivo}")
-            
-        with open(caminho_arquivo, 'r', encoding='utf-8') as f:
-            linhas = [linha.strip() for list_lin in f if (linha := list_lin.strip())]
-        
+
+        with open(caminho, 'r', encoding='utf-8') as f:
+            linhas = [linha.strip() for linha in f if linha.strip()]
+
         if not linhas:
             return
-        
-        # Leitura da primeira linha com número de vértices e arestas
-        self.V, self.E = map(int, linhas[0].split('\t'))
+
+        self.V, self.E = map(int, linhas[0].split())
         self.adj = {i: set() for i in range(self.V)}
-        
-        # Construção da lista de adjacência (Grafo não-direcionado)
+
         for linha in linhas[1:]:
-            u, v = map(int, linha.split('\t'))
+            u, v = map(int, linha.split())
             self.adj[u].add(v)
             self.adj[v].add(u)
 
@@ -39,7 +38,6 @@ class ColoracaoDSaturBacktracking:
         self.cores_finais = {}
 
     def _calcular_saturacao(self, vertice, coloridos):
-        """Mede o grau de saturação contando as cores distintas nos vizinhos."""
         cores_vizinhos = set()
         for vizinho in self.adj[vertice]:
             if vizinho in coloridos:
@@ -47,7 +45,6 @@ class ColoracaoDSaturBacktracking:
         return len(cores_vizinhos)
 
     def _escolher_proximo_vertice(self, coloridos, graus):
-        """Heurística DSatur: maior grau de saturação, com desempate por maior grau original."""
         melhor_vertice = None
         max_sat = -1
         max_grau = -1
@@ -65,7 +62,6 @@ class ColoracaoDSaturBacktracking:
         return melhor_vertice
 
     def _eh_valido(self, vertice, cor, coloridos):
-        """Garante que nenhum vizinho compartilhe a mesma cor."""
         for vizinho in self.adj[vertice]:
             if vizinho in coloridos and coloridos[vizinho] == cor:
                 return False
@@ -85,8 +81,8 @@ class ColoracaoDSaturBacktracking:
                 if self._backtracking(coloridos, limite_cores, graus):
                     return True
                 
-                del coloridos[u]  # Backtrack
-                
+                del coloridos[u]
+
         return False
 
     def resolver(self):
@@ -95,7 +91,6 @@ class ColoracaoDSaturBacktracking:
 
         graus = self.grafo.obter_graus()
         
-        # Testa progressivamente limites de k-cores para achar o número cromático exato
         for limite in range(1, self.V + 1):
             coloridos_temporarios = {}
             if self._backtracking(coloridos_temporarios, limite, graus):
