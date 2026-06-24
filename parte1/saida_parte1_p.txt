@@ -1,0 +1,4 @@
+ALGORITMO: Dijkstra
+JUSTIFICATIVA: O grafo pequeno nao possui arestas com peso negativo. Dijkstra e aplicavel e encontra a rota minima de forma eficiente.
+ROTA: 0 1 3 4
+CUSTO: 7
